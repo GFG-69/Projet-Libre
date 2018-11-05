@@ -24,11 +24,20 @@ public class PlayerTestController : MonoBehaviour {
 		} else {
 			grounded = false;
 		}
+		
 		if (Input.GetKeyDown(KeyCode.Space) && grounded) {
 			rb2d.velocity = new Vector2(0.0f,jump);
 		}
-        move.x = Input.GetAxis ("Horizontal");
-		Debug.Log(rb2d.position.y);
+
+		if (Input.GetKeyDown(KeyCode.E)) {
+			if (rb2d.IsTouchingLayers(LayerMask.GetMask("Take"))) {
+				Debug.Log("GTB");
+			} else {
+				Debug.Log("NB");
+			}
+		}
+		
+		move.x = Input.GetAxis ("Horizontal");
 		rb2d.position = rb2d.position + move * speed;
 	}
 

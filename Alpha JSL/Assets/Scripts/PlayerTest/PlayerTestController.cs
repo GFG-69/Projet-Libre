@@ -9,6 +9,8 @@ public class PlayerTestController : MonoBehaviour {
 
 	public float speed = 0.1f;
 	public float jump = 5.0f;
+	public Rigidbody2D ball;
+	public GameObject hand;
 
 	// Use this for initialization
 	void Start () {
@@ -29,12 +31,14 @@ public class PlayerTestController : MonoBehaviour {
 			rb2d.velocity = new Vector2(0.0f,jump);
 		}
 
-		if (Input.GetKeyDown(KeyCode.E)) {
-			if (rb2d.IsTouchingLayers(LayerMask.GetMask("Take"))) {
-				Debug.Log("GTB");
-			} else {
-				Debug.Log("NB");
-			}
+		if (Input.GetKey(KeyCode.E) && rb2d.IsTouchingLayers(LayerMask.GetMask("Take"))) {
+			ball.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y + 0.5f);
+			ball.angularVelocity = 0.0f;
+		}
+
+		if (Input.GetKeyUp(KeyCode.E) && rb2d.IsTouchingLayers(LayerMask.GetMask("Take"))) {
+			ball.velocity = new Vector2(0.0f, 0.0f);
+			ball.AddForce((transform.up + transform.right) * 300.0f);
 		}
 		
 		move.x = Input.GetAxis ("Horizontal");

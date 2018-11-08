@@ -9,6 +9,7 @@ public class PlayerTestController : MonoBehaviour {
 
 	public float speed = 0.1f;
 	public float jump = 5.0f;
+	public GameObject ballGO;
 	public Rigidbody2D ball;
 	public GameObject hand;
 
@@ -20,6 +21,9 @@ public class PlayerTestController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector2 move = Vector2.zero;
+
+		move.x = Input.GetAxis ("Horizontal");
+		rb2d.position = rb2d.position + move * speed;
 
 		if (rb2d.IsTouchingLayers(LayerMask.GetMask("Ground"))) {
 			grounded = true;
@@ -39,10 +43,21 @@ public class PlayerTestController : MonoBehaviour {
 		if (Input.GetKeyUp(KeyCode.E) && rb2d.IsTouchingLayers(LayerMask.GetMask("Take"))) {
 			ball.velocity = new Vector2(0.0f, 0.0f);
 			ball.AddForce((transform.up + transform.right) * 300.0f);
+			ball.AddTorque(3.0f);
 		}
 		
-		move.x = Input.GetAxis ("Horizontal");
-		rb2d.position = rb2d.position + move * speed;
+		if (ball.IsTouchingLayers(LayerMask.GetMask("Point1")) &&
+		ball.IsTouchingLayers(LayerMask.GetMask("Point2")) &&
+		(!Input.GetKey(KeyCode.E) || !rb2d.IsTouchingLayers(LayerMask.GetMask("Take"))) &&
+		ball.velocity.y < 0) {
+			StartCoroutine(Example());
+		}
+
 	}
+	IEnumerator Example()
+    {
+        yield return new WaitForSeconds(2);
+        ballGO.SetActive(false);
+    }
 
 }
